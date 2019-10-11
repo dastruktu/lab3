@@ -1,10 +1,6 @@
-package laborai.studijosktu;
+package edu.ktu.ds.lab3.utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.Arrays;
 
 /**
@@ -19,7 +15,7 @@ public class Ks { // KTU system - imituojama Javos System klasė
 
     private static final BufferedReader keyboard
             = new BufferedReader(new InputStreamReader(System.in));
-    private static String dataFolderKTU = "Duomenys";
+    private static String dataFolder = "data";
 
     static public String giveString(String prompt) {
         Ks.ou(prompt);
@@ -109,7 +105,7 @@ public class Ks { // KTU system - imituojama Javos System klasė
     }
 
     static public String giveFileName() {
-        File dir = new File(dataFolderKTU);
+        File dir = new File(dataFolder);
         dir.mkdir();
         oun("Jums prieinami failai " + Arrays.toString(dir.list()));
         String fn = giveString("Nurodykite pasirinktą duomenų failo vardą: ");
@@ -117,12 +113,13 @@ public class Ks { // KTU system - imituojama Javos System klasė
     }
 
     static public String getDataFolder() {
-        return dataFolderKTU;
+        return dataFolder;
     }
 
     static public void setDataFolder(String folderName) {
-        dataFolderKTU = folderName;
+        dataFolder = folderName;
     }
+
     private static final PrintStream sout = System.out;
     private static final PrintStream serr = System.out;
     private static int lineNr;
@@ -155,7 +152,11 @@ public class Ks { // KTU system - imituojama Javos System klasė
 
     static public void oufln(String format, Object... args) {
         sout.printf(format, args);
-        sout.println("");
+        sout.println();
+    }
+
+    static public void out(Object obj) {
+        sout.print(obj);
     }
 
     static public void ouf(String format, Object... args) {

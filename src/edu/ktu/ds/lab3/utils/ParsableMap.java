@@ -1,10 +1,10 @@
-package laborai.studijosktu;
+package edu.ktu.ds.lab3.utils;
 
 /**
  * @param <K>
  * @param <V>
  */
-public interface MapADTx<K, V> extends MapADTp<K, V> {
+public interface ParsableMap<K, V> extends MapEvaluable<K, V> {
 
     V put(String dataString);
 
@@ -17,7 +17,7 @@ public interface MapADTx<K, V> extends MapADTp<K, V> {
     void println(String title);
 
     /**
-     * Grąžina maišos lentelės turinį, skirtą atvaizdavimui Swing ir JavaFX
+     * Grąžina maišos lentelės turinį, skirtą atvaizdavimui JavaFX
      * lentelėse
      *
      * @param delimiter Poros teksto kirtiklis

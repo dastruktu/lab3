@@ -1,4 +1,4 @@
-package laborai.studijosktu;
+package edu.ktu.ds.lab3.utils;
 
 import java.util.Arrays;
 
@@ -16,7 +16,7 @@ import java.util.Arrays;
  *
  * @author darius.matulis@ktu.lt
  */
-public class MapKTU<K, V> implements MapADTp<K, V> {
+public class HashMap<K, V> implements MapEvaluable<K, V> {
 
     public static final int DEFAULT_INITIAL_CAPACITY = 16;
     public static final float DEFAULT_LOAD_FACTOR = 0.75f;
@@ -48,23 +48,23 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
      * lentelės parametrus. Jei kuris nors parametras nėra nustatomas - 
      * priskiriama standartinė reikšmė.
      */
-    public MapKTU() {
+    public HashMap() {
         this(DEFAULT_HASH_TYPE);
     }
 
-    public MapKTU(HashType ht) {
+    public HashMap(HashType ht) {
         this(DEFAULT_INITIAL_CAPACITY, ht);
     }
 
-    public MapKTU(int initialCapacity, HashType ht) {
+    public HashMap(int initialCapacity, HashType ht) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR, ht);
     }
 
-    public MapKTU(float loadFactor, HashType ht) {
+    public HashMap(float loadFactor, HashType ht) {
         this(DEFAULT_INITIAL_CAPACITY, loadFactor, ht);
     }
 
-    public MapKTU(int initialCapacity, float loadFactor, HashType ht) {
+    public HashMap(int initialCapacity, float loadFactor, HashType ht) {
         if (initialCapacity <= 0) {
             throw new IllegalArgumentException("Illegal initial capacity: " + initialCapacity);
         }
@@ -214,20 +214,19 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
      * @param node
      */
     private void rehash(Node<K, V> node) {
-        MapKTU mapKTU
-                = new MapKTU(table.length * 2, loadFactor, ht);
+        HashMap<K,V> map = new HashMap<>(table.length * 2, loadFactor, ht);
         for (int i = 0; i < table.length; i++) {
             while (table[i] != null) {
                 if (table[i].equals(node)) {
                     lastUpdatedChain = i;
                 }
-                mapKTU.put(table[i].key, table[i].value);
+                map.put(table[i].key, table[i].value);
                 table[i] = table[i].next;
             }
         }
-        table = mapKTU.table;
-        maxChainSize = mapKTU.maxChainSize;
-        chainsCounter = mapKTU.chainsCounter;
+        table = map.table;
+        maxChainSize = map.maxChainSize;
+        chainsCounter = map.chainsCounter;
         rehashesCounter++;
     }
 
@@ -266,7 +265,7 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
      * @param node
      * @return
      */
-    private Node getInChain(K key, Node node) {
+    private Node<K,V> getInChain(K key, Node<K,V> node) {
         if (key == null) {
             throw new IllegalArgumentException("Key is null in getInChain(Key key, Node node)");
         }
@@ -361,7 +360,7 @@ public class MapKTU<K, V> implements MapADTp<K, V> {
         return chainsCounter;
     }
 
-    protected class Node<K, V> {
+    protected static class Node<K, V> {
 
         // Raktas        
         protected K key;

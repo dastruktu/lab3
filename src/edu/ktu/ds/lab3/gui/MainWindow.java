@@ -93,7 +93,7 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
 
     private void initComponents() {
         // Formuojamas mėlynos spalvos skydelis (dešinėje pusėje)
-        
+
         // Užpildomi ComboBox'ai
         cmbCollisionTypes.setItems(FXCollections.observableArrayList(
                 MESSAGES.getString("cmbCollisionType1"),
@@ -113,10 +113,10 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         // Formuojamas mygtukų tinklelis (pilkas). Naudojama klasė Panels.
         paneButtons = new Panels(
                 new String[]{
-                        MESSAGES.getString("button1"),
-                        MESSAGES.getString("button2"),
-                        MESSAGES.getString("button3"),
-                        MESSAGES.getString("button4")}, 1, 4);
+                    MESSAGES.getString("button1"),
+                    MESSAGES.getString("button2"),
+                    MESSAGES.getString("button3"),
+                    MESSAGES.getString("button4")}, 1, 4);
         paneButtons.getButtons().forEach((btn) -> btn.setOnAction(this));
         IntStream.of(1, 3).forEach(p -> paneButtons.getButtons().get(p).setDisable(true));
 
@@ -140,38 +140,37 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         // Formuojama pirmoji parametrų lentelė (šviesiai žalia). Naudojama klasė Panels.
         paneParam1 = new Panels(
                 new String[]{
-                        MESSAGES.getString("lblParam11"),
-                        MESSAGES.getString("lblParam12"),
-                        MESSAGES.getString("lblParam13"),
-                        MESSAGES.getString("lblParam14"),
-                        MESSAGES.getString("lblParam15"),
-                        MESSAGES.getString("lblParam16")},
+                    MESSAGES.getString("lblParam11"),
+                    MESSAGES.getString("lblParam12"),
+                    MESSAGES.getString("lblParam13"),
+                    MESSAGES.getString("lblParam14"),
+                    MESSAGES.getString("lblParam15"),
+                    MESSAGES.getString("lblParam16")},
                 new String[]{
-                        MESSAGES.getString("tfParam11"),
-                        MESSAGES.getString("tfParam12"),
-                        MESSAGES.getString("tfParam13"),
-                        MESSAGES.getString("tfParam14"),
-                        MESSAGES.getString("tfParam15"),
-                        MESSAGES.getString("tfParam16")}, TF_WIDTH_SMALLER);
+                    MESSAGES.getString("tfParam11"),
+                    MESSAGES.getString("tfParam12"),
+                    MESSAGES.getString("tfParam13"),
+                    MESSAGES.getString("tfParam14"),
+                    MESSAGES.getString("tfParam15"),
+                    MESSAGES.getString("tfParam16")}, TF_WIDTH_SMALLER);
 
         // Formuojama antroji parametrų lentelė (gelsva). Naudojama klasė Panels.
         paneParam2 = new Panels(
                 new String[]{
-                        MESSAGES.getString("lblParam21"),
-                        MESSAGES.getString("lblParam22"),
-                        MESSAGES.getString("lblParam23"),
-                        MESSAGES.getString("lblParam24"),
-                        MESSAGES.getString("lblParam25"),
-                        MESSAGES.getString("lblParam26")},
+                    MESSAGES.getString("lblParam21"),
+                    MESSAGES.getString("lblParam22"),
+                    MESSAGES.getString("lblParam23"),
+                    MESSAGES.getString("lblParam24"),
+                    MESSAGES.getString("lblParam25"),
+                    MESSAGES.getString("lblParam26")},
                 new String[]{
-                        MESSAGES.getString("tfParam21"),
-                        MESSAGES.getString("tfParam22"),
-                        MESSAGES.getString("tfParam23"),
-                        MESSAGES.getString("tfParam24"),
-                        MESSAGES.getString("tfParam25"),
-                        MESSAGES.getString("tfParam26")}, TF_WIDTH_SMALLER);
+                    MESSAGES.getString("tfParam21"),
+                    MESSAGES.getString("tfParam22"),
+                    MESSAGES.getString("tfParam23"),
+                    MESSAGES.getString("tfParam24"),
+                    MESSAGES.getString("tfParam25"),
+                    MESSAGES.getString("tfParam26")}, TF_WIDTH_SMALLER);
 
-       
         // Dviejų lentelių skydeliai sudedami į šviesiai pilką skydelį
         paneParam12Events.setPadding(new Insets(SPACING_SMALLER, SPACING, SPACING, SPACING));
         paneParam12Events.setVgap(SPACING_SMALLER);
@@ -244,7 +243,7 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         cmbCollisionTypes.setStyle(Panels.STYLE_COMMON);
         cmbHashFunctions.setStyle(Panels.STYLE_COMMON);
         paneParam1.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneParam2.setBackground(new Background(new BackgroundFill(Color.KHAKI, CornerRadii.EMPTY, Insets.EMPTY)));        
+        paneParam2.setBackground(new Background(new BackgroundFill(Color.KHAKI, CornerRadii.EMPTY, Insets.EMPTY)));
         paneRight.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
         paneButtons.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         taInput.setFont(Font.font("Monospaced", 12));
@@ -429,14 +428,14 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
      */
     private void updateHashtableParameters(boolean colorize) {
         String[] parameters = new String[]{
-                String.valueOf(map.size()),
-                String.valueOf(map.getTableCapacity()),
-                String.valueOf(map.getMaxChainSize()),
-                String.valueOf(map.getRehashesCounter()),
-                String.valueOf(map.getLastUpdatedChain()),
-                // Užimtų maišos lentelės elementų skaičius procentais
-                String.format("%3.2f", (double) map.getChainsCounter() / map.getTableCapacity() * 100) + "%"
-                // .. naujus parametrus tęsiame čia ..
+            String.valueOf(map.size()),
+            String.valueOf(map.getTableCapacity()),
+            String.valueOf(map.getMaxChainSize()),
+            String.valueOf(map.getRehashesCounter()),
+            String.valueOf(map.getLastUpdatedChain()),
+            // Užimtų maišos lentelės elementų skaičius procentais
+            String.format("%3.2f", (double) map.getChainsCounter() / map.getTableCapacity() * 100) + "%"
+        // .. naujus parametrus tęsiame čia ..
         };
         for (int i = 0; i < parameters.length; i++) {
             String str = paneParam2.getTfOfTable().get(i).getText();
@@ -507,11 +506,11 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         Platform.runLater(() -> {
             Locale.setDefault(Locale.US); // Suvienodiname skaičių formatus
             MainWindow window = new MainWindow(stage);
-            stage.setScene(new Scene(window,1100, 650));
-           stage.setMaximized(true);         
+            stage.setScene(new Scene(window, 1100, 650));
+            //stage.setMaximized(true);
             stage.setTitle(MESSAGES.getString("title"));
             stage.getIcons().add(new Image("file:" + MESSAGES.getString("icon")));
-            stage.setOnCloseRequest(e -> System.exit(0));            
+            stage.setOnCloseRequest(e -> System.exit(0));
             stage.show();
         });
     }

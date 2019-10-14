@@ -4,7 +4,7 @@ package edu.ktu.ds.lab3.utils;
  * @param <K>
  * @param <V>
  */
-public interface ParsableMap<K, V> extends MapEvaluable<K, V> {
+public interface ParsableMap<K, V> extends EvaluableMap<K, V> {
 
     V put(String dataString);
 
@@ -20,7 +20,7 @@ public interface ParsableMap<K, V> extends MapEvaluable<K, V> {
      * Grąžina maišos lentelės turinį, skirtą atvaizdavimui JavaFX
      * lentelėse
      *
-     * @param delimiter Poros teksto kirtiklis
+     * @param delimiter Poros toString() eilutės kirtiklis
      * @return Grąžina maišos lentelės turinį dvimačiu masyvu
      */
     String[][] getModelList(String delimiter);

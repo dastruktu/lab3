@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Porų ("maping'ų") raktas-reikšmė objektų kolekcijos - atvaizdžio realizacija
  * maišos lentele, kolizijas sprendžiant atskirų grandinėlių (angl. separate
  * chaining) metodu. Neužmirškite, jei poros raktas - nuosavos klasės objektas,
- * pvz. klasės Automobilis objektas, klasėje būtina perdengti metodus
+ * pvz. klasės Car objektas, klasėje būtina perdengti metodus
  * equals(Object o) ir hashCode().
  *
  * @param <K> atvaizdžio raktas
@@ -16,7 +16,7 @@ import java.util.Arrays;
  *
  * @author darius.matulis@ktu.lt
  */
-public class HashMap<K, V> implements MapEvaluable<K, V> {
+public class HashMap<K, V> implements EvaluableMap<K, V> {
 
     public static final int DEFAULT_INITIAL_CAPACITY = 16;
     public static final float DEFAULT_LOAD_FACTOR = 0.75f;
@@ -214,19 +214,19 @@ public class HashMap<K, V> implements MapEvaluable<K, V> {
      * @param node
      */
     private void rehash(Node<K, V> node) {
-        HashMap<K,V> map = new HashMap<>(table.length * 2, loadFactor, ht);
+        HashMap<K,V> newMap = new HashMap<>(table.length * 2, loadFactor, ht);
         for (int i = 0; i < table.length; i++) {
             while (table[i] != null) {
                 if (table[i].equals(node)) {
                     lastUpdatedChain = i;
                 }
-                map.put(table[i].key, table[i].value);
+                newMap.put(table[i].key, table[i].value);
                 table[i] = table[i].next;
             }
         }
-        table = map.table;
-        maxChainSize = map.maxChainSize;
-        chainsCounter = map.chainsCounter;
+        table = newMap.table;
+        maxChainSize = newMap.maxChainSize;
+        chainsCounter = newMap.chainsCounter;
         rehashesCounter++;
     }
 

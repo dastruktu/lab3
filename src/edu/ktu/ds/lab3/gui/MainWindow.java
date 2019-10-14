@@ -22,7 +22,6 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.util.List;
@@ -52,10 +51,10 @@ import java.util.stream.Stream;
  * |                                | paneButtons |
  * |--------------------------------|-------------|
  * |--------------------(Bottom)------------------|
- * |----------------panParam123Events-------------|
- * |-----------|-----------|-----------|----------|
- * | panParam1 | panParam2 | panParam3 | taEvents |
- * |-----------|-----------|-----------|----------|
+ * |----------------panParam12Events--------------|
+ * |-----------|-----------|----------------------|
+ * | panParam1 | panParam2 |       taEvents       |
+ * |-----------|-----------|----------------------|
  * </pre>
  *
  * @author darius.matulis@ktu.lt
@@ -73,10 +72,10 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
     private final ComboBox cmbCollisionTypes = new ComboBox();
     private final ComboBox cmbHashFunctions = new ComboBox();
     private final TextArea taInput = new TextArea();
-    private final GridPane paneParam123Events = new GridPane();
+    private final GridPane paneParam12Events = new GridPane();
     private final GridPane paneRight = new GridPane();
     private final TextArea taEvents = new TextArea();
-    private Panels paneParam1, paneParam2, paneParam3, paneButtons;
+    private Panels paneParam1, paneParam2, paneButtons;
     private MapTable<String[], String> table;
     private MainWindowMenu mainWindowMenu;
     private final Stage stage;
@@ -93,7 +92,8 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
     }
 
     private void initComponents() {
-        // Formuojamas rožinės spalvos panelis (dešinėje pusėje)
+        // Formuojamas mėlynos spalvos skydelis (dešinėje pusėje)
+        
         // Užpildomi ComboBox'ai
         cmbCollisionTypes.setItems(FXCollections.observableArrayList(
                 MESSAGES.getString("cmbCollisionType1"),
@@ -110,7 +110,7 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         cmbHashFunctions.setOnAction(this);
         cmbHashFunctions.getSelectionModel().select(0);
 
-        // Formuojamas mygtukų tinklelis (mėlynas). Naudojama klasė Panels.
+        // Formuojamas mygtukų tinklelis (pilkas). Naudojama klasė Panels.
         paneButtons = new Panels(
                 new String[]{
                         MESSAGES.getString("button1"),
@@ -120,7 +120,7 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         paneButtons.getButtons().forEach((btn) -> btn.setOnAction(this));
         IntStream.of(1, 3).forEach(p -> paneButtons.getButtons().get(p).setDisable(true));
 
-        // Viskas sudedama į rožinės spalvos pane
+        // Viskas sudedama į mėlynos spalvos skydelį 
         GridPane.setVgrow(taInput, Priority.ALWAYS);
         taInput.setPrefWidth(TF_WIDTH);
         cmbCollisionTypes.setPrefWidth(TF_WIDTH);
@@ -171,31 +171,15 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
                         MESSAGES.getString("tfParam25"),
                         MESSAGES.getString("tfParam26")}, TF_WIDTH_SMALLER);
 
-        // Formuojama trečioji parametrų lentelė (šviesiai žalia). Naudojama klasė Panels.
-        paneParam3 = new Panels(
-                new String[]{
-                        MESSAGES.getString("lblParam31"),
-                        MESSAGES.getString("lblParam32"),
-                        MESSAGES.getString("lblParam33"),
-                        MESSAGES.getString("lblParam34"),
-                        MESSAGES.getString("lblParam35"),
-                        MESSAGES.getString("lblParam36")},
-                new String[]{
-                        MESSAGES.getString("tfParam31"),
-                        MESSAGES.getString("tfParam32"),
-                        MESSAGES.getString("tfParam33"),
-                        MESSAGES.getString("tfParam34"),
-                        MESSAGES.getString("tfParam35"),
-                        MESSAGES.getString("tfParam36")}, TF_WIDTH_SMALLER);
-
-        // Visų trijų lentelių paneliai sudedami į šviesiai pilką panelį
-        paneParam123Events.setPadding(new Insets(SPACING_SMALLER, SPACING, SPACING, SPACING));
-        paneParam123Events.setVgap(SPACING_SMALLER);
-        paneParam123Events.setHgap(SPACING);
-        paneParam123Events.add(new Label(MESSAGES.getString("border4")), 0, 0);
+       
+        // Dviejų lentelių skydeliai sudedami į šviesiai pilką skydelį
+        paneParam12Events.setPadding(new Insets(SPACING_SMALLER, SPACING, SPACING, SPACING));
+        paneParam12Events.setVgap(SPACING_SMALLER);
+        paneParam12Events.setHgap(SPACING);
+        paneParam12Events.add(new Label(MESSAGES.getString("border4")), 0, 0);
         GridPane.setHgrow(taEvents, Priority.ALWAYS);
-        paneParam123Events.addRow(1, paneParam1, paneParam2, paneParam3, taEvents);
-        paneParam123Events.add(new Label(MESSAGES.getString("border6")), 3, 0);
+        paneParam12Events.addRow(1, paneParam1, paneParam2, taEvents);
+        paneParam12Events.add(new Label(MESSAGES.getString("border6")), 2, 0);
 
         // Sukuriama lentelė, sukuriamas trūkstamas metodas
         table = new MapTable<String[], String>() {
@@ -249,7 +233,7 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         vboxTable.getChildren().addAll(new Label(MESSAGES.getString("border5")), table);
         setRight(paneRight);
         setCenter(vboxTable);
-        setBottom(paneParam123Events);
+        setBottom(paneParam12Events);
         appearance();
     }
 
@@ -260,10 +244,9 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         cmbCollisionTypes.setStyle(Panels.STYLE_COMMON);
         cmbHashFunctions.setStyle(Panels.STYLE_COMMON);
         paneParam1.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneParam2.setBackground(new Background(new BackgroundFill(Color.KHAKI, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneParam3.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneRight.setBackground(new Background(new BackgroundFill(Color.PINK, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneButtons.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        paneParam2.setBackground(new Background(new BackgroundFill(Color.KHAKI, CornerRadii.EMPTY, Insets.EMPTY)));        
+        paneRight.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        paneButtons.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         taInput.setFont(Font.font("Monospaced", 12));
         taInput.setDisable(true);
         taEvents.setEditable(false);
@@ -524,11 +507,11 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         Platform.runLater(() -> {
             Locale.setDefault(Locale.US); // Suvienodiname skaičių formatus
             MainWindow window = new MainWindow(stage);
-            stage.setScene(new Scene(window));
+            stage.setScene(new Scene(window,1100, 650));
+           stage.setMaximized(true);         
             stage.setTitle(MESSAGES.getString("title"));
             stage.getIcons().add(new Image("file:" + MESSAGES.getString("icon")));
-            stage.setOnCloseRequest((WindowEvent event) -> System.exit(0));
-            //stage.setMaximized(true);         
+            stage.setOnCloseRequest(e -> System.exit(0));            
             stage.show();
         });
     }

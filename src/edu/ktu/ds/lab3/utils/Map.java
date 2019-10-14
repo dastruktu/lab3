@@ -28,6 +28,11 @@ public interface Map<K, V> {
      */
     void clear();
 
+     /**
+      * Grąžinamas porų masyvas.
+      * 
+      * @return Grąžinamas porų masyvas.
+      */
     String[][] toArray();
 
     /**

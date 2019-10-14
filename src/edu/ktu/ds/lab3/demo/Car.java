@@ -113,23 +113,47 @@ public final class Car implements Parsable<Car> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Car car = (Car) o;
-        return year == car.year &&
-                mileage == car.mileage &&
-                Double.compare(car.price, price) == 0 &&
-                Objects.equals(make, car.make) &&
-                Objects.equals(model, car.model);
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.make);
+        hash = 29 * hash + Objects.hashCode(this.model);
+        hash = 29 * hash + this.year;
+        hash = 29 * hash + this.mileage;
+        hash = 29 * hash + (int) (Double.doubleToLongBits(this.price) ^ (Double.doubleToLongBits(this.price) >>> 32));
+        return hash;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(make, model, year, mileage, price);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Car other = (Car) obj;
+        if (this.year != other.year) {
+            return false;
+        }
+        if (this.mileage != other.mileage) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
+            return false;
+        }
+        if (!Objects.equals(this.make, other.make)) {
+            return false;
+        }
+        if (!Objects.equals(this.model, other.model)) {
+            return false;
+        }
+        return true;
     }
 
-    // Automobilis klases objektų gamintojas
+    // Car klases objektų gamintojas
     public static class Builder {
 
         private final static Random RANDOM = new Random(1949);  // Atsitiktinių generatorius

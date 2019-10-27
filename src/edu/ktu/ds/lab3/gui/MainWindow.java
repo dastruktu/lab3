@@ -145,14 +145,16 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
                     MESSAGES.getString("lblParam13"),
                     MESSAGES.getString("lblParam14"),
                     MESSAGES.getString("lblParam15"),
-                    MESSAGES.getString("lblParam16")},
+                    MESSAGES.getString("lblParam16"),
+                    MESSAGES.getString("lblParam17")},
                 new String[]{
                     MESSAGES.getString("tfParam11"),
                     MESSAGES.getString("tfParam12"),
                     MESSAGES.getString("tfParam13"),
                     MESSAGES.getString("tfParam14"),
                     MESSAGES.getString("tfParam15"),
-                    MESSAGES.getString("tfParam16")}, TF_WIDTH_SMALLER);
+                    MESSAGES.getString("tfParam16"),
+                    MESSAGES.getString("tfParam17")}, TF_WIDTH_SMALLER);
 
         // Formuojama antroji parametrų lentelė (gelsva). Naudojama klasė Panels.
         paneParam2 = new Panels(
@@ -162,14 +164,16 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
                     MESSAGES.getString("lblParam23"),
                     MESSAGES.getString("lblParam24"),
                     MESSAGES.getString("lblParam25"),
-                    MESSAGES.getString("lblParam26")},
+                    MESSAGES.getString("lblParam26"),
+                    MESSAGES.getString("lblParam27")},
                 new String[]{
                     MESSAGES.getString("tfParam21"),
                     MESSAGES.getString("tfParam22"),
                     MESSAGES.getString("tfParam23"),
                     MESSAGES.getString("tfParam24"),
                     MESSAGES.getString("tfParam25"),
-                    MESSAGES.getString("tfParam26")}, TF_WIDTH_SMALLER);
+                    MESSAGES.getString("tfParam26"),
+                    MESSAGES.getString("tfParam27")}, TF_WIDTH_SMALLER);
 
         // Dviejų lentelių skydeliai sudedami į šviesiai pilką skydelį
         paneParam12Events.setPadding(new Insets(SPACING_SMALLER, SPACING, SPACING, SPACING));

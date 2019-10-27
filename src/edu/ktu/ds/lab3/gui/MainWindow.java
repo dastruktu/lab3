@@ -1,16 +1,11 @@
-package laborai.gui.fx;
+package edu.ktu.ds.lab3.gui;
 
-import java.io.File;
-import java.util.List;
-import laborai.studijosktu.MapADTx;
-import laborai.studijosktu.HashType;
-import laborai.demo.Automobilis;
-import laborai.demo.AutoGamyba;
-import laborai.gui.MyException;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import edu.ktu.ds.lab3.demo.Car;
+import edu.ktu.ds.lab3.demo.CarsGenerator;
+import edu.ktu.ds.lab3.demo.SimpleBenchmark;
+import edu.ktu.ds.lab3.utils.HashType;
+import edu.ktu.ds.lab3.utils.ParsableHashMap;
+import edu.ktu.ds.lab3.utils.ParsableMap;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -19,33 +14,27 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
-import laborai.demo.GreitaveikosTyrimas;
-import laborai.studijosktu.MapKTUx;
+
+import java.io.File;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.SynchronousQueue;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
- * Lab4 langas su JavaFX
+ * Lab3 langas su JavaFX
  * <pre>
  *                    BorderLayout
  * |---------------------(Top)--------------------|
@@ -62,17 +51,17 @@ import laborai.studijosktu.MapKTUx;
  * |                                | paneButtons |
  * |--------------------------------|-------------|
  * |--------------------(Bottom)------------------|
- * |----------------panParam123Events-------------|
- * |-----------|-----------|-----------|----------|
- * | panParam1 | panParam2 | panParam3 | taEvents |
- * |-----------|-----------|-----------|----------|
+ * |----------------panParam12Events--------------|
+ * |-----------|-----------|----------------------|
+ * | panParam1 | panParam2 |       taEvents       |
+ * |-----------|-----------|----------------------|
  * </pre>
  *
  * @author darius.matulis@ktu.lt
  */
-public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent> {
+public class MainWindow extends BorderPane implements EventHandler<ActionEvent> {
 
-    private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("laborai.gui.messages");
+    private static final ResourceBundle MESSAGES = ResourceBundle.getBundle("edu.ktu.ds.lab3.gui.messages");
     private static final int TF_WIDTH = 200;
     private static final int TF_WIDTH_SMALLER = 80;
     private static final double SPACING = 5.0;
@@ -83,49 +72,46 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
     private final ComboBox cmbCollisionTypes = new ComboBox();
     private final ComboBox cmbHashFunctions = new ComboBox();
     private final TextArea taInput = new TextArea();
-    private final GridPane paneParam123Events = new GridPane();
+    private final GridPane paneParam12Events = new GridPane();
     private final GridPane paneRight = new GridPane();
     private final TextArea taEvents = new TextArea();
-    private PanelsFX paneParam1, paneParam2, paneParam3, paneButtons;
-    private TableFX<String[], String> table;
-    private MenuFX menuFX;
+    private Panels paneParam1, paneParam2, paneButtons;
+    private MapTable<String[], String> table;
+    private MainWindowMenu mainWindowMenu;
     private final Stage stage;
 
-    private MapADTx<String, Automobilis> map;
+    private ParsableMap<String, Car> map;
     private int sizeOfInitialSubSet, sizeOfGenSet, colWidth, initialCapacity;
     private float loadFactor;
     private HashType ht = HashType.DIVISION;
-    private final AutoGamyba autoGamyba = new AutoGamyba();
+    private final CarsGenerator carsGenerator = new CarsGenerator();
 
-    public Lab4WindowFX(Stage stage) {
+    public MainWindow(Stage stage) {
         this.stage = stage;
         initComponents();
     }
 
     private void initComponents() {
-        // Formuojamas rožinės spalvos panelis (dešinėje pusėje)
+        // Formuojamas mėlynos spalvos skydelis (dešinėje pusėje)
+
         // Užpildomi ComboBox'ai
         cmbCollisionTypes.setItems(FXCollections.observableArrayList(
-                new String[]{
-                    MESSAGES.getString("cmbCollisionType1"),
-                    MESSAGES.getString("cmbCollisionType2"),
-                    MESSAGES.getString("cmbCollisionType3"),
-                    MESSAGES.getString("cmbCollisionType4")}
-        ));
+                MESSAGES.getString("cmbCollisionType1"),
+                MESSAGES.getString("cmbCollisionType2"),
+                MESSAGES.getString("cmbCollisionType3"),
+                MESSAGES.getString("cmbCollisionType4")));
         cmbCollisionTypes.setOnAction(this);
         cmbCollisionTypes.getSelectionModel().select(0);
         cmbHashFunctions.setItems(FXCollections.observableArrayList(
-                new String[]{
-                    MESSAGES.getString("cmbHashFunction1"),
-                    MESSAGES.getString("cmbHashFunction2"),
-                    MESSAGES.getString("cmbHashFunction3"),
-                    MESSAGES.getString("cmbHashFunction4")}
-        ));
+                MESSAGES.getString("cmbHashFunction1"),
+                MESSAGES.getString("cmbHashFunction2"),
+                MESSAGES.getString("cmbHashFunction3"),
+                MESSAGES.getString("cmbHashFunction4")));
         cmbHashFunctions.setOnAction(this);
         cmbHashFunctions.getSelectionModel().select(0);
 
-        // Formuojamas mygtukų tinklelis (mėlynas). Naudojama klasė PanelsFX.
-        paneButtons = new PanelsFX(
+        // Formuojamas mygtukų tinklelis (pilkas). Naudojama klasė Panels.
+        paneButtons = new Panels(
                 new String[]{
                     MESSAGES.getString("button1"),
                     MESSAGES.getString("button2"),
@@ -134,7 +120,7 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
         paneButtons.getButtons().forEach((btn) -> btn.setOnAction(this));
         IntStream.of(1, 3).forEach(p -> paneButtons.getButtons().get(p).setDisable(true));
 
-        // Viskas sudedama į rožinės spalvos pane
+        // Viskas sudedama į mėlynos spalvos skydelį 
         GridPane.setVgrow(taInput, Priority.ALWAYS);
         taInput.setPrefWidth(TF_WIDTH);
         cmbCollisionTypes.setPrefWidth(TF_WIDTH);
@@ -151,108 +137,98 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
         paneRight.setVgap(SPACING);
         paneRight.setPadding(INSETS);
 
-        // Formuojama pirmoji parametrų lentelė (šviesiai žalia). Naudojama klasė PanelsFX.
-        paneParam1 = new PanelsFX(
+        // Formuojama pirmoji parametrų lentelė (šviesiai žalia). Naudojama klasė Panels.
+        paneParam1 = new Panels(
                 new String[]{
                     MESSAGES.getString("lblParam11"),
                     MESSAGES.getString("lblParam12"),
                     MESSAGES.getString("lblParam13"),
                     MESSAGES.getString("lblParam14"),
                     MESSAGES.getString("lblParam15"),
-                    MESSAGES.getString("lblParam16")},
+                    MESSAGES.getString("lblParam16"),
+                    MESSAGES.getString("lblParam17")},
                 new String[]{
                     MESSAGES.getString("tfParam11"),
                     MESSAGES.getString("tfParam12"),
                     MESSAGES.getString("tfParam13"),
                     MESSAGES.getString("tfParam14"),
                     MESSAGES.getString("tfParam15"),
-                    MESSAGES.getString("tfParam16")}, TF_WIDTH_SMALLER);
+                    MESSAGES.getString("tfParam16"),
+                    MESSAGES.getString("tfParam17")}, TF_WIDTH_SMALLER);
 
-        // Formuojama antroji parametrų lentelė (gelsva). Naudojama klasė PanelsFX.
-        paneParam2 = new PanelsFX(
+        // Formuojama antroji parametrų lentelė (gelsva). Naudojama klasė Panels.
+        paneParam2 = new Panels(
                 new String[]{
                     MESSAGES.getString("lblParam21"),
                     MESSAGES.getString("lblParam22"),
                     MESSAGES.getString("lblParam23"),
                     MESSAGES.getString("lblParam24"),
                     MESSAGES.getString("lblParam25"),
-                    MESSAGES.getString("lblParam26")},
+                    MESSAGES.getString("lblParam26"),
+                    MESSAGES.getString("lblParam27")},
                 new String[]{
                     MESSAGES.getString("tfParam21"),
                     MESSAGES.getString("tfParam22"),
                     MESSAGES.getString("tfParam23"),
                     MESSAGES.getString("tfParam24"),
                     MESSAGES.getString("tfParam25"),
-                    MESSAGES.getString("tfParam26")}, TF_WIDTH_SMALLER);
+                    MESSAGES.getString("tfParam26"),
+                    MESSAGES.getString("tfParam27")}, TF_WIDTH_SMALLER);
 
-        // Formuojama trečioji parametrų lentelė (šviesiai žalia). Naudojama klasė PanelsFX.           
-        paneParam3 = new PanelsFX(
-                new String[]{
-                    MESSAGES.getString("lblParam31"),
-                    MESSAGES.getString("lblParam32"),
-                    MESSAGES.getString("lblParam33"),
-                    MESSAGES.getString("lblParam34"),
-                    MESSAGES.getString("lblParam35"),
-                    MESSAGES.getString("lblParam36")},
-                new String[]{
-                    MESSAGES.getString("tfParam31"),
-                    MESSAGES.getString("tfParam32"),
-                    MESSAGES.getString("tfParam33"),
-                    MESSAGES.getString("tfParam34"),
-                    MESSAGES.getString("tfParam35"),
-                    MESSAGES.getString("tfParam36")}, TF_WIDTH_SMALLER);
-
-        // Visų trijų lentelių paneliai sudedami į šviesiai pilką panelį
-        paneParam123Events.setPadding(new Insets(SPACING_SMALLER, SPACING, SPACING, SPACING));
-        paneParam123Events.setVgap(SPACING_SMALLER);
-        paneParam123Events.setHgap(SPACING);
-        paneParam123Events.add(new Label(MESSAGES.getString("border4")), 0, 0);
+        // Dviejų lentelių skydeliai sudedami į šviesiai pilką skydelį
+        paneParam12Events.setPadding(new Insets(SPACING_SMALLER, SPACING, SPACING, SPACING));
+        paneParam12Events.setVgap(SPACING_SMALLER);
+        paneParam12Events.setHgap(SPACING);
+        paneParam12Events.add(new Label(MESSAGES.getString("border4")), 0, 0);
         GridPane.setHgrow(taEvents, Priority.ALWAYS);
-        paneParam123Events.addRow(1, paneParam1, paneParam2, paneParam3, taEvents);
-        paneParam123Events.add(new Label(MESSAGES.getString("border6")), 3, 0);
+        paneParam12Events.addRow(1, paneParam1, paneParam2, taEvents);
+        paneParam12Events.add(new Label(MESSAGES.getString("border6")), 2, 0);
 
         // Sukuriama lentelė, sukuriamas trūkstamas metodas
-        table = new TableFX<String[], String>() {
+        table = new MapTable<String[], String>() {
             @Override
             public ObservableValue<String> returnValue(TableColumn.CellDataFeatures<String[], String> p) {
-                int index = Integer.valueOf(p.getTableColumn().getId());
+                int index = Integer.parseInt(p.getTableColumn().getId());
                 return new SimpleStringProperty(index < p.getValue().length ? p.getValue()[index] : "");
             }
         };
 
         // Sukuriamas meniu
-        menuFX = new MenuFX() {
+        mainWindowMenu = new MainWindowMenu() {
             @Override
             public void handle(ActionEvent ae) {
+                Region region = (Region) taEvents.lookup(".content");
+                region.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+
                 try {
                     Object source = ae.getSource();
-                    KsFX.setFormatStartOfLine(true);
-                    if (source.equals(menuFX.getMenus().get(0).getItems().get(0))) {
+                    KsGui.setFormatStartOfLine(true);
+                    if (source.equals(mainWindowMenu.getMenus().get(0).getItems().get(0))) {
                         fileChooseMenu();
-                    } else if (source.equals(menuFX.getMenus().get(0).getItems().get(1))) {
-                        KsFX.ounerr(taEvents, MESSAGES.getString("notImplemented"));
-                    } else if (source.equals(menuFX.getMenus().get(0).getItems().get(3))) {
+                    } else if (source.equals(mainWindowMenu.getMenus().get(0).getItems().get(1))) {
+                        KsGui.ounerr(taEvents, MESSAGES.getString("notImplemented"));
+                    } else if (source.equals(mainWindowMenu.getMenus().get(0).getItems().get(3))) {
                         System.exit(0);
-                    } else if (source.equals(menuFX.getMenus().get(1).getItems().get(0))) {
+                    } else if (source.equals(mainWindowMenu.getMenus().get(1).getItems().get(0))) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.initStyle(StageStyle.UTILITY);
                         alert.setTitle(MESSAGES.getString("menuItem21"));
                         alert.setHeaderText(MESSAGES.getString("author"));
                         alert.showAndWait();
                     }
-                } catch (MyException e) {
-                    KsFX.ounerr(taEvents, e.getMessage());
+                } catch (ValidationException e) {
+                    KsGui.ounerr(taEvents, e.getMessage());
                 } catch (Exception e) {
-                    KsFX.ounerr(taEvents, MESSAGES.getString("systemError"));
+                    KsGui.ounerr(taEvents, MESSAGES.getString("systemError"));
                     e.printStackTrace(System.out);
                 }
-                KsFX.setFormatStartOfLine(false);
+                KsGui.setFormatStartOfLine(false);
             }
         };
 
-        // Formuojamas Lab4 langas
+        // Formuojamas Lab3 langas
         // ..viršuje, dešinėje, centre ir apačioje talpiname objektus..
-        setTop(menuFX);
+        setTop(mainWindowMenu);
 
         VBox vboxTable = new VBox();
         vboxTable.setPadding(INSETS_SMALLER);
@@ -260,7 +236,7 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
         vboxTable.getChildren().addAll(new Label(MESSAGES.getString("border5")), table);
         setRight(paneRight);
         setCenter(vboxTable);
-        setBottom(paneParam123Events);
+        setBottom(paneParam12Events);
         appearance();
     }
 
@@ -268,13 +244,12 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
      * Kosmetika
      */
     private void appearance() {
-        cmbCollisionTypes.setStyle(PanelsFX.STYLE_COMMON);
-        cmbHashFunctions.setStyle(PanelsFX.STYLE_COMMON);
+        cmbCollisionTypes.setStyle(Panels.STYLE_COMMON);
+        cmbHashFunctions.setStyle(Panels.STYLE_COMMON);
         paneParam1.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
         paneParam2.setBackground(new Background(new BackgroundFill(Color.KHAKI, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneParam3.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneRight.setBackground(new Background(new BackgroundFill(Color.PINK, CornerRadii.EMPTY, Insets.EMPTY)));
-        paneButtons.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        paneRight.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+        paneButtons.setBackground(new Background(new BackgroundFill(Color.LIGHTGREY, CornerRadii.EMPTY, Insets.EMPTY)));
         taInput.setFont(Font.font("Monospaced", 12));
         taInput.setDisable(true);
         taEvents.setEditable(false);
@@ -288,7 +263,7 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
 
     @Override
     public void handle(ActionEvent event) {
-        KsFX.setFormatStartOfLine(true);
+        KsGui.setFormatStartOfLine(true);
         Platform.runLater(() -> {
             try {
                 System.gc();
@@ -303,12 +278,12 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
                 } else if (source instanceof ComboBox && (source.equals(cmbCollisionTypes) || source.equals(cmbHashFunctions))) {
                     IntStream.of(1, 3).forEach(p -> paneButtons.getButtons().get(p).setDisable(true));
                 }
-            } catch (MyException e) {
-                KsFX.ounerr(taEvents, MESSAGES.getString(e.getMessage()), e.getValue());
+            } catch (ValidationException e) {
+                KsGui.ounerr(taEvents, MESSAGES.getString(e.getMessage()), e.getValue());
             } catch (UnsupportedOperationException e) {
-                KsFX.ounerr(taEvents, e.getMessage());
+                KsGui.ounerr(taEvents, e.getMessage());
             } catch (Exception e) {
-                KsFX.ounerr(taEvents, MESSAGES.getString("systemError"));
+                KsGui.ounerr(taEvents, MESSAGES.getString("systemError"));
                 e.printStackTrace(System.out);
             }
         });
@@ -318,15 +293,15 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
         if (source.equals(paneButtons.getButtons().get(0))) {
             mapGeneration(null);
         } else if (source.equals(paneButtons.getButtons().get(1))) {
-            mapAdd();
+            mapPut();
         } else if (source.equals(paneButtons.getButtons().get(2))) {
             mapEfficiency();
         } else if (source.equals(paneButtons.getButtons().get(3))) {
-            KsFX.ounerr(taEvents, MESSAGES.getString("notImplemented"));
+            KsGui.ounerr(taEvents, MESSAGES.getString("notImplemented"));
         }
     }
 
-    public void mapGeneration(String filePath) {
+    private void mapGeneration(String filePath) {
         // Išjungiami 2 ir 4 mygtukai
         IntStream.of(1, 3).forEach(p -> paneButtons.getButtons().get(p).setDisable(true));
         // Duomenų nuskaitymas iš parametrų lentelės (žalios)
@@ -335,19 +310,19 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
         createMap();
         // Jei failas nenurodytas - generuojami automobiliai ir talpinami atvaizdyje
         if (filePath == null) {
-            Automobilis[] autoArray = autoGamyba.gamintiIrParduotiAutomobilius(sizeOfGenSet, sizeOfInitialSubSet);
-            for (Automobilis a : autoArray) {
+            Car[] carsArray = carsGenerator.generateShuffleCarsAndIds(sizeOfGenSet, sizeOfInitialSubSet);
+            for (Car c : carsArray) {
                 map.put(
-                        autoGamyba.gautiIsBazesAutoId(), //raktas
-                        a);
+                        carsGenerator.getCarId(), //raktas
+                        c);
             }
-            KsFX.ounArgs(taEvents, MESSAGES.getString("msg1"), map.size());
+            KsGui.ounArgs(taEvents, MESSAGES.getString("mapPuts"), map.size());
         } else { // Jei failas nurodytas skaitoma iš failo
             map.load(filePath);
             if (map.isEmpty()) {
-                KsFX.ounerr(taEvents, MESSAGES.getString("msg6"), filePath);
+                KsGui.ounerr(taEvents, MESSAGES.getString("fileWasNotReadOrEmpty"), filePath);
             } else {
-                KsFX.ou(taEvents, MESSAGES.getString("msg5"), filePath);
+                KsGui.ou(taEvents, MESSAGES.getString("fileWasRead"), filePath);
             }
         }
 
@@ -362,45 +337,48 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
         IntStream.of(1, 3).forEach(p -> paneButtons.getButtons().get(p).setDisable(false));
     }
 
-    public void mapAdd() {
-        Automobilis a = autoGamyba.parduotiAutomobili();
+    private void mapPut() {
+        Car car = carsGenerator.getCar();
         map.put(
-                autoGamyba.gautiIsBazesAutoId(), // Raktas
-                a);
+                carsGenerator.getCarId(), // Raktas
+                car);
         table.formTable(map.getMaxChainSize() * 2 + 1, colWidth);
         String[][] modelList = map.getModelList(paneParam1.getTfOfTable().get(5).getText());
         table.setItems(FXCollections.observableArrayList(modelList));
         updateHashtableParameters(true);
-        KsFX.oun(taEvents, a, MESSAGES.getString("msg2"));
+        KsGui.oun(taEvents, car, MESSAGES.getString("mapPut"));
     }
 
-    public void mapEfficiency() {
-        KsFX.oun(taEvents, "", MESSAGES.getString("msg3"));
+    private void mapEfficiency() {
+        KsGui.oun(taEvents, "", MESSAGES.getString("benchmark"));
         paneRight.setDisable(true);
-        menuFX.setDisable(true);
-        GreitaveikosTyrimas gt = new GreitaveikosTyrimas();
+        mainWindowMenu.setDisable(true);
+
+        BlockingQueue<String> resultsLogger = new SynchronousQueue<>();
+        Semaphore semaphore = new Semaphore(-1);
+        SimpleBenchmark simpleBenchmark = new SimpleBenchmark(resultsLogger, semaphore);
 
         // Ši gija paima rezultatus iš greitaveikos tyrimo gijos ir išveda 
         // juos i taEvents. Gija baigia darbą kai gaunama FINISH_COMMAND     
         new Thread(() -> {
             try {
                 String result;
-                while (!(result = gt.getResultsLogger().take())
-                        .equals(GreitaveikosTyrimas.FINISH_COMMAND)) {
-                    KsFX.oun(taEvents, result);
-                    gt.getSemaphore().release();
+                while (!(result = resultsLogger.take())
+                        .equals(SimpleBenchmark.FINISH_COMMAND)) {
+                    KsGui.ou(taEvents, result);
+                    semaphore.release();
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
-            gt.getSemaphore().release();
+            semaphore.release();
             paneRight.setDisable(false);
-            menuFX.setDisable(false);
+            mainWindowMenu.setDisable(false);
         }, "Greitaveikos_rezultatu_gija").start();
 
         //Šioje gijoje atliekamas greitaveikos tyrimas
-        new Thread(() -> gt.pradetiTyrima(), "Greitaveikos_tyrimo_gija").start();
+        new Thread(simpleBenchmark::startBenchmark, "Greitaveikos_tyrimo_gija").start();
     }
 
     private void readMapParameters() {
@@ -435,13 +413,13 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
     private void createMap() {
         switch (cmbCollisionTypes.getSelectionModel().getSelectedIndex()) {
             case 0:
-                map = new MapKTUx<>(new String(), new Automobilis(), initialCapacity, loadFactor, ht);
+                map = new ParsableHashMap<>(String::new, Car::new, initialCapacity, loadFactor, ht);
                 break;
             // ...
             // Programuojant kitus kolizijų sprendimo metodus reikia papildyti switch sakinį
             default:
                 IntStream.of(1, 3).forEach(p -> paneButtons.getButtons().get(p).setDisable(true));
-                throw new MyException("notImplemented");
+                throw new ValidationException("notImplemented");
         }
     }
 
@@ -459,16 +437,16 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
             String.valueOf(map.getMaxChainSize()),
             String.valueOf(map.getRehashesCounter()),
             String.valueOf(map.getLastUpdatedChain()),
-            // Užimtų maišos lentelės elementų skaičius procentais           
+            // Užimtų maišos lentelės elementų skaičius procentais
             String.format("%3.2f", (double) map.getChainsCounter() / map.getTableCapacity() * 100) + "%"
         // .. naujus parametrus tęsiame čia ..
         };
         for (int i = 0; i < parameters.length; i++) {
             String str = paneParam2.getTfOfTable().get(i).getText();
             if ((!str.equals(parameters[i]) && !str.equals("") && colorize)) {
-                paneParam2.getTfOfTable().get(i).setStyle(PanelsFX.STYLE_PINK);
+                paneParam2.getTfOfTable().get(i).setStyle(Panels.STYLE_PINK);
             } else {
-                paneParam2.getTfOfTable().get(i).setStyle(PanelsFX.STYLE_COMMON);
+                paneParam2.getTfOfTable().get(i).setStyle(Panels.STYLE_COMMON);
             }
             paneParam2.getTfOfTable().get(i).setText(parameters[i]);
         }
@@ -485,8 +463,6 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
         fc.setInitialDirectory(new File(System.getProperty("user.dir")));
         File file = fc.showOpenDialog(stage);
         if (file != null) {
-            Region region = (Region) taEvents.lookup(".content");
-            region.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
             mapGeneration(file.getAbsolutePath());
         }
     }
@@ -498,14 +474,14 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
     private int notNegativeNumberVerifier(TextField tf, String errorMessage) {
         int result;
         try {
-            result = Integer.valueOf(tf.getText());
-            tf.setStyle(result < 0 ? PanelsFX.STYLE_ERROR : PanelsFX.STYLE_COMMON);
+            result = Integer.parseInt(tf.getText());
+            tf.setStyle(result < 0 ? Panels.STYLE_ERROR : Panels.STYLE_COMMON);
             if (result < 0) {
-                throw new MyException(errorMessage, tf.getText());
+                throw new ValidationException(errorMessage, tf.getText());
             }
         } catch (NumberFormatException e) {
-            tf.setStyle(PanelsFX.STYLE_ERROR);
-            throw new MyException(errorMessage, tf.getText());
+            tf.setStyle(Panels.STYLE_ERROR);
+            throw new ValidationException(errorMessage, tf.getText());
         }
 
         return result;
@@ -518,29 +494,27 @@ public class Lab4WindowFX extends BorderPane implements EventHandler<ActionEvent
     private float loadFactorVerifier(TextField tf) {
         float factor;
         try {
-            factor = Float.valueOf(tf.getText());
-            tf.setStyle(factor <= 0.0 || factor > 1.0 ? PanelsFX.STYLE_ERROR : PanelsFX.STYLE_COMMON);
+            factor = Float.parseFloat(tf.getText());
+            tf.setStyle(factor <= 0.0 || factor > 1.0 ? Panels.STYLE_ERROR : Panels.STYLE_COMMON);
             if (factor <= 0.0 || factor > 1.0) {
-                throw new MyException("badLoadFactor", tf.getText());
+                throw new ValidationException("badLoadFactor", tf.getText());
             }
         } catch (NumberFormatException e) {
-            tf.setStyle(PanelsFX.STYLE_ERROR);
-            throw new MyException("badLoadFactor", tf.getText());
+            tf.setStyle(Panels.STYLE_ERROR);
+            throw new ValidationException("badLoadFactor", tf.getText());
         }
         return factor;
     }
 
-    public static void createAndShowFXGUI(Stage stage) {
+    public static void createAndShowGui(Stage stage) {
         Platform.runLater(() -> {
             Locale.setDefault(Locale.US); // Suvienodiname skaičių formatus
-            Lab4WindowFX window = new Lab4WindowFX(stage);
-            stage.setScene(new Scene(window));
+            MainWindow window = new MainWindow(stage);
+            stage.setScene(new Scene(window, 1100, 650));
+            //stage.setMaximized(true);
             stage.setTitle(MESSAGES.getString("title"));
             stage.getIcons().add(new Image("file:" + MESSAGES.getString("icon")));
-            stage.setOnCloseRequest((WindowEvent event) -> {
-                System.exit(0);
-            });
-            //stage.setMaximized(true);         
+            stage.setOnCloseRequest(e -> System.exit(0));
             stage.show();
         });
     }

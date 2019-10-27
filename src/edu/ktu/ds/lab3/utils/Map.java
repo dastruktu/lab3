@@ -1,4 +1,4 @@
-package laborai.studijosktu;
+package edu.ktu.ds.lab3.utils;
 
 /**
  * Interfeisu aprašomas Atvaizdžio ADT.
@@ -6,7 +6,7 @@ package laborai.studijosktu;
  * @param <K> Atvaizdžio poros raktas
  * @param <V> Atvaizdžio poros reikšmė
  */
-public interface MapADT<K, V> {
+public interface Map<K, V> {
 
     /**
      * Patikrinama ar atvaizdis yra tuščias.
@@ -28,6 +28,11 @@ public interface MapADT<K, V> {
      */
     void clear();
 
+     /**
+      * Grąžinamas porų masyvas.
+      * 
+      * @return Grąžinamas porų masyvas.
+      */
     String[][] toArray();
 
     /**

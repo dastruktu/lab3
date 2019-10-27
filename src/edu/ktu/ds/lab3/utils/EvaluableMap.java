@@ -1,11 +1,13 @@
-package laborai.studijosktu;
+package edu.ktu.ds.lab3.utils;
 
 /**
- *
+ * Interfeisu aprašomas maišos lentelės charakteristikas skaičiuojantis 
+ * Atvaizdžio ADT
+ * 
  * @param <K> raktas
  * @param <V> reikšmė
  */
-public interface MapADTp<K, V> extends MapADT<K, V> {
+public interface EvaluableMap<K, V> extends Map<K, V> {
 
     /**
      * Grąžina maksimalų grandinėlės ilgį.
@@ -41,5 +43,4 @@ public interface MapADTp<K, V> extends MapADT<K, V> {
      * @return Grandinėlių kiekis.
      */
     int getChainsCounter();
-
 }

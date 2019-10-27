@@ -1,4 +1,4 @@
-package laborai.gui.fx;
+package edu.ktu.ds.lab3.gui;
 
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -10,21 +10,21 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 /**
- * Klasė, skirta duomenų išvedimui į JavaFX GUI
+ * Klasė, skirta duomenų išvedimui į Java GUI
  *
  * @author darius
  */
-public class KsFX {
+public class KsGui {
 
     private static int lineNr;
     private static boolean formatStartOfLine = true;
 
     public static void setFormatStartOfLine(boolean formatStartOfLine) {
-        KsFX.formatStartOfLine = formatStartOfLine;
+        KsGui.formatStartOfLine = formatStartOfLine;
     }
 
     private static String getStartOfLine() {
-        return (formatStartOfLine) ? ++lineNr + "| ".intern() : "".intern();
+        return (formatStartOfLine) ? ++lineNr + "| " : "";
     }
 
     public static void ou(TextArea ta, Object o) {
@@ -50,13 +50,13 @@ public class KsFX {
 
     public static void ou(TextArea ta, Object o, String msg) {
         String startOfLine = getStartOfLine();
-        Platform.runLater(() -> ta.appendText(startOfLine + msg + ": ".intern()));
+        Platform.runLater(() -> ta.appendText(startOfLine + msg + ": "));
         oun(ta, o);
     }
 
     public static void oun(TextArea ta, Object o, String msg) {
         String startOfLine = getStartOfLine();
-        Platform.runLater(() -> ta.appendText(startOfLine + msg + ": ".intern() + System.lineSeparator()));
+        Platform.runLater(() -> ta.appendText(startOfLine + msg + ": " + System.lineSeparator()));
         oun(ta, o);
     }
 
@@ -66,28 +66,24 @@ public class KsFX {
     }
 
     public static void ounerr(TextArea ta, Exception e) {
-        Region region = (Region) ta.lookup(".content".intern());
+        Region region = (Region) ta.lookup(".content");
         region.setBackground(new Background(new BackgroundFill(Color.PINK, CornerRadii.EMPTY, Insets.EMPTY)));
         String startOfLine = getStartOfLine();
-        Platform.runLater(() -> ta.appendText(new StringBuilder()
-                .append(startOfLine)
-                .append(e.getLocalizedMessage())
-                .append(System.lineSeparator())
-                .toString()));
+        Platform.runLater(() -> ta.appendText(startOfLine + e.getLocalizedMessage() + System.lineSeparator()));
     }
 
     public static void ounerr(TextArea ta, String msg) {
-        Region region = (Region) ta.lookup(".content".intern());
+        Region region = (Region) ta.lookup(".content");
         region.setBackground(new Background(new BackgroundFill(Color.PINK, CornerRadii.EMPTY, Insets.EMPTY)));
         String startOfLine = getStartOfLine();
         Platform.runLater(() -> ta.appendText(startOfLine + msg + System.lineSeparator()));
     }
 
     public static void ounerr(TextArea ta, String msg, String parameter) {
-        Region region = (Region) ta.lookup(".content".intern());
+        Region region = (Region) ta.lookup(".content");
         region.setBackground(new Background(new BackgroundFill(Color.PINK, CornerRadii.EMPTY, Insets.EMPTY)));
         String startOfLine = getStartOfLine();
         Platform.runLater(() -> ta.appendText(startOfLine + msg + ((parameter == null || parameter.isEmpty())
-                ? "" : ": ".intern() + parameter) + System.lineSeparator()));
+                ? "" : ": " + parameter) + System.lineSeparator()));
     }
 }

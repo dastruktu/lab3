@@ -111,9 +111,9 @@ public class ParsableHashMap<K, V extends Parsable<V>> extends HashMap<K, V> imp
                     .filter(line -> !line.isEmpty())
                     .forEach(this::put);
         } catch (FileNotFoundException e) {
-            Ks.ern("Tinkamas duomenų failas " + filePath + " nerastas: " + e.getLocalizedMessage());
+            Ks.ern("Tinkamas duomenų failas nerastas: " + e.getLocalizedMessage());
         } catch (IOException | UncheckedIOException e) {
-            Ks.ern("Failo " + filePath + " skaitymo klaida: " + e.getLocalizedMessage());
+            Ks.ern("Failo skaitymo klaida: " + e.getLocalizedMessage());
         }
     }
 
@@ -125,7 +125,7 @@ public class ParsableHashMap<K, V extends Parsable<V>> extends HashMap<K, V> imp
      */
     @Override
     public void save(String filePath) {
-        throw new UnsupportedOperationException("Save nepalaikomas");
+        throw new UnsupportedOperationException("Saugojimas.. nepalaikomas");
     }
 
     /**

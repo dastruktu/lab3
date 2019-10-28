@@ -510,7 +510,7 @@ public class MainWindow extends BorderPane implements EventHandler<ActionEvent> 
         Platform.runLater(() -> {
             Locale.setDefault(Locale.US); // Suvienodiname skaičių formatus
             MainWindow window = new MainWindow(stage);
-            stage.setScene(new Scene(window, 1100, 650));
+            stage.setScene(new Scene(window, 1300, 700));
             //stage.setMaximized(true);
             stage.setTitle(MESSAGES.getString("title"));
             stage.getIcons().add(new Image("file:" + MESSAGES.getString("icon")));

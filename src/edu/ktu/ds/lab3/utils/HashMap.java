@@ -6,8 +6,8 @@ import java.util.Arrays;
  * Porų ("maping'ų") raktas-reikšmė objektų kolekcijos - atvaizdžio realizacija
  * maišos lentele, kolizijas sprendžiant atskirų grandinėlių (angl. separate
  * chaining) metodu. Neužmirškite, jei poros raktas - nuosavos klasės objektas,
- * pvz. klasės Car objektas, klasėje būtina perdengti metodus
- * equals(Object o) ir hashCode().
+ * pvz. klasės Car objektas, klasėje būtina perdengti metodus equals(Object o)
+ * ir hashCode().
  *
  * @param <K> atvaizdžio raktas
  * @param <V> atvaizdžio reikšmė
@@ -214,7 +214,7 @@ public class HashMap<K, V> implements EvaluableMap<K, V> {
      * @param node
      */
     private void rehash(Node<K, V> node) {
-        HashMap<K,V> newMap = new HashMap<>(table.length * 2, loadFactor, ht);
+        HashMap<K, V> newMap = new HashMap<>(table.length * 2, loadFactor, ht);
         for (int i = 0; i < table.length; i++) {
             while (table[i] != null) {
                 if (table[i].equals(node)) {
@@ -265,7 +265,7 @@ public class HashMap<K, V> implements EvaluableMap<K, V> {
      * @param node
      * @return
      */
-    private Node<K,V> getInChain(K key, Node<K,V> node) {
+    private Node<K, V> getInChain(K key, Node<K, V> node) {
         if (key == null) {
             throw new IllegalArgumentException("Key is null in getInChain(Key key, Node node)");
         }

@@ -1,9 +1,9 @@
 package edu.ktu.ds.lab3.utils;
 
 /**
- * Interfeisu aprašomas maišos lentelės charakteristikas skaičiuojantis 
+ * Interfeisu aprašomas maišos lentelės charakteristikas skaičiuojantis
  * Atvaizdžio ADT
- * 
+ *
  * @param <K> raktas
  * @param <V> reikšmė
  */

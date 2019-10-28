@@ -45,7 +45,7 @@ public abstract class MainWindowMenu extends MenuBar implements EventHandler<Act
         menuItem21.setOnAction(this);
         menu2.getItems().add(menuItem21);
 
-        getMenus().addAll(menu1, menu2);      
+        getMenus().addAll(menu1, menu2);
     }
 
     @Override

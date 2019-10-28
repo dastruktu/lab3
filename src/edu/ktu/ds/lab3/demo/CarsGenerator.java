@@ -32,7 +32,7 @@ public class CarsGenerator {
     }
 
     public Car[] generateShuffleCarsAndIds(int setSize,
-                                           int setTakeSize) throws ValidationException {
+            int setTakeSize) throws ValidationException {
 
         if (setTakeSize > setSize) {
             setTakeSize = setSize;

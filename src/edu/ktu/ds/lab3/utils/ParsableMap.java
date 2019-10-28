@@ -17,8 +17,7 @@ public interface ParsableMap<K, V> extends EvaluableMap<K, V> {
     void println(String title);
 
     /**
-     * Grąžina maišos lentelės turinį, skirtą atvaizdavimui JavaFX
-     * lentelėse
+     * Grąžina maišos lentelės turinį, skirtą atvaizdavimui JavaFX lentelėse
      *
      * @param delimiter Poros toString() eilutės kirtiklis
      * @return Grąžina maišos lentelės turinį dvimačiu masyvu

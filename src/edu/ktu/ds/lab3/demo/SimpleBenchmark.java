@@ -38,6 +38,7 @@ public class SimpleBenchmark {
 
     /**
      * For Gui benchmark
+     *
      * @param resultsLogger
      * @param semaphore
      */

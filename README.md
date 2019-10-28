@@ -1,7 +1,6 @@
-**Laboratorinis darbas Nr.3 - Maišos lentelės duomenų struktūrų
-tyrimas**
+# Laboratorinis darbas Nr.3 - Maišos lentelės duomenų struktūrų tyrimas
 
-**Darbo tikslai**
+## Darbo tikslai
 
 1.  Įsisavinti maišos lentelių sudarymo principus, galimus kolizijų
     sprendimo metodus.
@@ -12,23 +11,24 @@ tyrimas**
 
 4.  Ištirti skirtingų maišos lentelių realizacijų metodų greitaveiką.
 
-**Atsiskaitymas**
+##Atsiskaitymas
 
 1.  Pateikiama atlikta individuali darbo dalis ir ataskaitos elektroninė
     versija.
 
 2.  Operatyviai atliekamos dėstytojo nurodytos užduotys:
 
-    a.  Atlikti sukurto projekto demonstraciją.
+    a)  Atlikti sukurto projekto demonstraciją.
 
-    b.  Atlikti nurodytų metodų greitaveikos tyrimą.
+    b)  Atlikti nurodytų metodų greitaveikos tyrimą.
 
-    c.  Atsakoma į klausimus apie **edu.ktu.ds.lab3.utils** paketo
+    c)  Atsakoma į klausimus apie **edu.ktu.ds.lab3.utils** paketo
         klasių struktūrą ir metodus.
 
-**Darbo eiga**
+## Darbo eiga
 
-***Duota*:** Projektas **Lab3\_MaisosLenteles**, kuriame yra pateiktos
+### Duota
+Projektas **Lab3\_MaisosLenteles**, kuriame yra pateiktos
 toliau naudojamos sisteminės klasės, grafinės JavaFX aplinkos klasės
 (paketas **edu.ktu.ds.lab3.gui)** ir demonstracinė Atvaizdžio ADT
 realizacija maišos lentele, kolizijas sprendžianti atskirų grandinėlių
@@ -36,12 +36,13 @@ metodu (klasės **edu.ktu.ds.lab3.utils.HashMap ir ParsableHashMap**), o
 taip pat demo variantas laboratorinio darbo vykdymui pakete
 **edu.ktu.ds.lab3.demo.**
 
-***Atlikti***: sukurkite naują paketą **edu.ktu.ds.lab3.pavarde,** esant
+### Reikia sukurti
+Sukurkite naują paketą **edu.ktu.ds.lab3.pavarde,** esant
 poreikiui į jį perkelkite reikiamas klases iš ankstesnių laboratorinių
 darbų, o taip pat atlikite reikalingas užduotis, susijusias su maišos
 lentelių kūrimu bei panaudojimu.
 
-***Tyrimo ir analizės dalis***
+### Tyrimo ir analizės dalis
 
 1.  Išnagrinėkite klasės **edu.ktu.ds.lab3.utils.HashMap** metodus,
     ištirkite jų panaudojimą operacijų atlikimui su atvaizdžiu.
@@ -50,7 +51,7 @@ lentelių kūrimu bei panaudojimu.
     \<lab3\_projekto\_direktorija\>/data/zodynas.txt surašytais
     žodžiais.
 
-***Individuali programavimo dalis***
+### Individuali programavimo dalis
 
 1.  Pagal duotą **Car** klasės pavyzdį sukurkite individualiai
     pasirinktų elementų klases (4-5 komponentai), tenkinančias
@@ -71,21 +72,17 @@ lentelių kūrimu bei panaudojimu.
 4.  Klasėje **edu.ktu.ds.lab3.utils.HashMap** realizuokite metodus (1,
     4, 11 metodai):
 
-<!-- -->
-
-a)  ***boolean containsValue(Object value)***, grąžinantį true, jei
+    a) ***boolean containsValue(Object value)***, grąžinantį true, jei
     atvaizdyje egzistuoja vienas ar daugiau raktų metodo argumente
     nurodytai reikšmei.
 
-b)  **V putIfAbsent(K key, V value)**. Jei argumente nurodytas raktas
+    b) ***V putIfAbsent(K key, V value)***. Jei argumente nurodytas raktas
     neturi reikšmės šiame atvaizdyje, tada argumente nurodyta raktas -
     reikšmė pora įrašoma ir grąžinama null. Kitu atveju grąžinama
     atvaizdyje jau egzistuojanti raktą atitinkanti reikšmė.
 
-c)  **int numberOfEmpties**, grąžinantį maišos lentelės masyvo tuščių
+    c) ***int numberOfEmpties***, grąžinantį maišos lentelės masyvo tuščių
     elementų skaičių.
-
-<!-- -->
 
 5.  Klasėje **edu.ktu.ds.lab3.utils.HashMap** sukurkite individualiai
     pagal variantą nurodytus metodus (M4 ir M5 užduotys), atlikite jų

@@ -24,7 +24,7 @@ public class ParsableHashMap<K, V extends Parsable<V>> extends HashMap<K, V> imp
      * @param valueCreateFunction
      */
     public ParsableHashMap(Function<String, K> keyCreateFunction,
-                           Function<String, V> valueCreateFunction) {
+            Function<String, V> valueCreateFunction) {
 
         this(keyCreateFunction, valueCreateFunction, DEFAULT_HASH_TYPE);
     }
@@ -37,8 +37,8 @@ public class ParsableHashMap<K, V extends Parsable<V>> extends HashMap<K, V> imp
      * @param ht
      */
     public ParsableHashMap(Function<String, K> keyCreateFunction,
-                           Function<String, V> valueCreateFunction,
-                           HashType ht) {
+            Function<String, V> valueCreateFunction,
+            HashType ht) {
 
         this(keyCreateFunction, valueCreateFunction, DEFAULT_INITIAL_CAPACITY, ht);
     }
@@ -52,9 +52,9 @@ public class ParsableHashMap<K, V extends Parsable<V>> extends HashMap<K, V> imp
      * @param ht
      */
     public ParsableHashMap(Function<String, K> keyCreateFunction,
-                           Function<String, V> valueCreateFunction,
-                           int initialCapacity,
-                           HashType ht) {
+            Function<String, V> valueCreateFunction,
+            int initialCapacity,
+            HashType ht) {
 
         this(keyCreateFunction, valueCreateFunction, initialCapacity, DEFAULT_LOAD_FACTOR, ht);
     }
@@ -69,10 +69,10 @@ public class ParsableHashMap<K, V extends Parsable<V>> extends HashMap<K, V> imp
      * @param ht
      */
     public ParsableHashMap(Function<String, K> keyCreateFunction,
-                           Function<String, V> valueCreateFunction,
-                           int initialCapacity,
-                           float loadFactor,
-                           HashType ht) {
+            Function<String, V> valueCreateFunction,
+            int initialCapacity,
+            float loadFactor,
+            HashType ht) {
 
         super(initialCapacity, loadFactor, ht);
         this.keyCreateFunction = keyCreateFunction;
@@ -105,17 +105,15 @@ public class ParsableHashMap<K, V extends Parsable<V>> extends HashMap<K, V> imp
             return;
         }
         clear();
-        try {
-            try (BufferedReader fReader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())) {
-                fReader.lines()
-                        .map(String::trim)
-                        .filter(line -> !line.isEmpty())
-                        .forEach(this::put);
-            }
+        try (BufferedReader fReader = Files.newBufferedReader(Paths.get(filePath), Charset.defaultCharset())) {
+            fReader.lines()
+                    .map(String::trim)
+                    .filter(line -> !line.isEmpty())
+                    .forEach(this::put);
         } catch (FileNotFoundException e) {
-            Ks.ern("Tinkamas duomenų failas " + filePath + " nerastas");
+            Ks.ern("Tinkamas duomenų failas " + filePath + " nerastas: " + e.getLocalizedMessage());
         } catch (IOException | UncheckedIOException e) {
-            Ks.ern("Failo " + filePath + " skaitymo klaida:" + e.getLocalizedMessage());
+            Ks.ern("Failo " + filePath + " skaitymo klaida: " + e.getLocalizedMessage());
         }
     }
 

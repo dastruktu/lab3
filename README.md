@@ -11,7 +11,7 @@
 
 4.  Ištirti skirtingų maišos lentelių realizacijų metodų greitaveiką.
 
-##Atsiskaitymas
+## Atsiskaitymas
 
 1.  Pateikiama atlikta individuali darbo dalis ir ataskaitos elektroninė
     versija.
